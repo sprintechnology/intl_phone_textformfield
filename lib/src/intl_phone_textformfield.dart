@@ -14,9 +14,10 @@ class IntlPhoneTextFormField extends StatefulWidget {
   final GlobalKey formKey;
   final List<String> countriesRestriction;
   final InputDecoration decoration;
+  final Function(IntlPhoneNumber) onPhoneNumberUpdated;
 
   const IntlPhoneTextFormField(
-      {Key key, @required this.phoneNumber, this.inputLabel, this.countriesRestriction, this.errorMessage, this.autoValidate = true, this.formKey, this.decoration})
+      {Key key, @required this.phoneNumber ,this.onPhoneNumberUpdated, this.inputLabel, this.countriesRestriction, this.errorMessage, this.autoValidate = true, this.formKey, this.decoration})
       : super(key: key);
 
   @override
@@ -67,6 +68,7 @@ class _IntlPhoneTextFormFieldState extends State<IntlPhoneTextFormField> {
     setState(() {
       phoneControllerMessage = isValid ? null : errorMessage;
     });
+    widget.onPhoneNumberUpdated(currentIntlPhoneNumber);
   }
 
   @override
