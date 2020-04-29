@@ -33,9 +33,10 @@ class _IntlPhoneTextFormFieldState extends State<IntlPhoneTextFormField> {
   IntlPhoneNumber currentIntlPhoneNumber = IntlPhoneNumber();
 
   loadCountries() async {
-    String list = await DefaultAssetBundle.of(context)
+    String jsonCountryList = await DefaultAssetBundle.of(context)
         .loadString('packages/${PhoneDefaultConfig.packageName}/assets/countries.json');
-    json.decode(list).forEach((element) {
+    assert(jsonCountryList != null);
+    json.decode(jsonCountryList).forEach((element) {
       Country country = Country.fromJson(element);
       if (widget.countriesRestriction != null) {
         if(widget.countriesRestriction.contains(country.alpha2Code)){
@@ -94,8 +95,8 @@ class _IntlPhoneTextFormFieldState extends State<IntlPhoneTextFormField> {
             onChanged: (Country newCountry) {
               setState(() {
                 selectedCountry = newCountry;
-                validatePhoneNumber();
               });
+              validatePhoneNumber();
             },
             items: countries.map<DropdownMenuItem<Country>>((Country value) {
               return DropdownMenuItem<Country>(

@@ -2,6 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:phone_number/phone_number.dart';
 
 class IntlPhoneNumber {
+
+  final String _countryCodeKey = 'country_code';
+  final String _intlNumberKey = 'e164';
+  final String _nationalNumberKey = 'national_number';
+
   final String initialValue;
   String internationalPhoneNumber;
   String localPhoneNumber;
@@ -34,9 +39,9 @@ class IntlPhoneNumber {
   }
 
   decodeParsedNumber(Map<dynamic, dynamic>  decodedValues){
-    this.dialCode = "+${decodedValues['country_code']}";
-    this.countryCode = decodedValues['country_code'];
-    this.internationalPhoneNumber = decodedValues['e164'];
-    this.localPhoneNumber = decodedValues['national_number'];
+    this.dialCode = "+${decodedValues[_countryCodeKey]}";
+    this.countryCode = decodedValues[_countryCodeKey];
+    this.internationalPhoneNumber = decodedValues[_intlNumberKey];
+    this.localPhoneNumber = decodedValues[_nationalNumberKey];
   }
 }
