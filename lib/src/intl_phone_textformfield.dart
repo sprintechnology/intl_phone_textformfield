@@ -16,7 +16,7 @@ class IntlPhoneTextFormField extends StatefulWidget {
   final InputDecoration decoration;
 
   const IntlPhoneTextFormField(
-      {Key key, @required this.phoneNumber, this.inputLabel, this.countriesRestriction, this.errorMessage, this.autoValidate = false, this.formKey, this.decoration})
+      {Key key, @required this.phoneNumber, this.inputLabel, this.countriesRestriction, this.errorMessage, this.autoValidate = true, this.formKey, this.decoration})
       : super(key: key);
 
   @override
