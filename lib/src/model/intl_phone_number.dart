@@ -25,7 +25,7 @@ class IntlPhoneNumber {
       });
 
   Future<bool> testPhoneNumberValidity({bool isInitialValueToTest = false}) async {
-    String phoneNumber = isInitialValueToTest ? this.initialValue  : this.localPhoneNumber;
+    String phoneNumber = isInitialValueToTest ? this.initialValue : this.dialCode + this.localPhoneNumber;
     assert(phoneNumber != null);
     _cleanValues();
     this.parsedPhoneNumber = await _plugin
