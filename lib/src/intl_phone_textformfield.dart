@@ -16,7 +16,7 @@ class IntlPhoneTextFormField extends StatefulWidget {
   final InputDecoration decoration;
 
   const IntlPhoneTextFormField(
-      {Key key, @required this.phoneNumber, this.inputLabel, this.countriesRestriction, this.errorMessage, this.autoValidate, this.formKey, this.decoration})
+      {Key key, @required this.phoneNumber, this.inputLabel, this.countriesRestriction, this.errorMessage, this.autoValidate = false, this.formKey, this.decoration})
       : super(key: key);
 
   @override
@@ -63,7 +63,7 @@ class _IntlPhoneTextFormFieldState extends State<IntlPhoneTextFormField> {
       localPhoneNumber: phoneNumber != null ? phoneNumber : phoneController
           ?.text,
     );
-    bool isValid = await currentIntlPhoneNumber.isValid();
+    bool isValid = await currentIntlPhoneNumber.testPhoneNumberValidity();
     setState(() {
       phoneControllerMessage = isValid ? null : errorMessage;
     });
@@ -78,7 +78,7 @@ class _IntlPhoneTextFormFieldState extends State<IntlPhoneTextFormField> {
   }
 
   validateInitialValue() async{
-    bool isValid = await widget.phoneNumber.isValid(isInitialValueToTest: true);
+    bool isValid = await widget.phoneNumber.testPhoneNumberValidity(isInitialValueToTest: true);
     if(isValid){
       selectedCountry = countries.firstWhere((element) => element.dialCode == widget.phoneNumber.dialCode) ?? Country();
       phoneController.text = widget.phoneNumber.localPhoneNumber;

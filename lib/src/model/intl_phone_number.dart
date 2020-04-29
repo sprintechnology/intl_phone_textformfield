@@ -12,6 +12,7 @@ class IntlPhoneNumber {
   String localPhoneNumber;
   String countryCode;
   String dialCode;
+  bool isValid = false;
   final PhoneNumber _plugin = PhoneNumber();
   Map<dynamic, dynamic> parsedPhoneNumber;
 
@@ -23,22 +24,31 @@ class IntlPhoneNumber {
         this.dialCode,
       });
 
-  Future<bool> isValid({bool isInitialValueToTest = false}) async {
+  Future<bool> testPhoneNumberValidity({bool isInitialValueToTest = false}) async {
     String phoneNumber = isInitialValueToTest ? this.initialValue  : this.localPhoneNumber;
     assert(phoneNumber != null);
+    _cleanValues();
     this.parsedPhoneNumber = await _plugin
         .parse(phoneNumber, region: this.countryCode)
         .then((value) {
-      decodeParsedNumber(value);
+      _decodeParsedNumber(value);
       return value;
     }).catchError((e) {
       debugPrint(e.toString());
       return null;
     });
-    return this.parsedPhoneNumber != null;
+    this.isValid = this.parsedPhoneNumber != null;
+    return this.isValid;
   }
 
-  decodeParsedNumber(Map<dynamic, dynamic>  decodedValues){
+  _cleanValues(){
+    this.dialCode = null;
+    this.countryCode = null;
+    this.internationalPhoneNumber = null;
+    this.localPhoneNumber = null;
+  }
+
+  _decodeParsedNumber(Map<dynamic, dynamic>  decodedValues){
     this.dialCode = "+${decodedValues[_countryCodeKey]}";
     this.countryCode = decodedValues[_countryCodeKey];
     this.internationalPhoneNumber = decodedValues[_intlNumberKey];
