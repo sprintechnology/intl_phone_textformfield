@@ -16,7 +16,7 @@ class IntlPhoneTextFormField extends StatefulWidget {
   final InputDecoration decoration;
 
   const IntlPhoneTextFormField(
-      {Key key, @required this.inputLabel, @required this.phoneNumber, this.countriesRestriction, this.errorMessage, this.autoValidate, this.formKey, this.decoration})
+      {Key key, @required this.phoneNumber, this.inputLabel, this.countriesRestriction, this.errorMessage, this.autoValidate, this.formKey, this.decoration})
       : super(key: key);
 
   @override
@@ -131,7 +131,7 @@ class _IntlPhoneTextFormFieldState extends State<IntlPhoneTextFormField> {
             decoration: widget.decoration ?? InputDecoration(
               isDense: false,
               contentPadding: EdgeInsets.only(top: 5),
-              labelText: widget.inputLabel,
+              labelText: widget.inputLabel ?? PhoneDefaultConfig.defaultLabelMessage,
             ),
             validator: (String value) {
               if (value.isEmpty || value.length < 5) {
