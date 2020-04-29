@@ -13,9 +13,10 @@ class IntlPhoneTextFormField extends StatefulWidget {
   final bool autoValidate;
   final GlobalKey formKey;
   final List<String> countriesRestriction;
+  final InputDecoration decoration;
 
   const IntlPhoneTextFormField(
-      {Key key, @required this.inputLabel, @required this.phoneNumber, this.countriesRestriction, this.errorMessage, this.autoValidate, this.formKey})
+      {Key key, @required this.inputLabel, @required this.phoneNumber, this.countriesRestriction, this.errorMessage, this.autoValidate, this.formKey, this.decoration})
       : super(key: key);
 
   @override
@@ -127,7 +128,7 @@ class _IntlPhoneTextFormFieldState extends State<IntlPhoneTextFormField> {
             maxLines: 1,
             controller: phoneController,
             autovalidate: widget.autoValidate ?? false,
-            decoration: InputDecoration(
+            decoration: widget.decoration ?? InputDecoration(
               isDense: false,
               contentPadding: EdgeInsets.only(top: 5),
               labelText: widget.inputLabel,
