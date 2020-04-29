@@ -8,20 +8,22 @@ import 'model/country.dart';
 
 class IntlPhoneTextFormField extends StatefulWidget {
   final String inputLabel;
-  final List<String> countriesRestrictions;
   final IntlPhoneNumber phoneNumber;
   final String errorMessage;
   final bool autoValidate;
   final GlobalKey formKey;
+  final List<String> countriesRestriction;
 
-  const IntlPhoneTextFormField({Key key, @required this.inputLabel, this.phoneNumber, this.countriesRestrictions, this.errorMessage, this.autoValidate, this.formKey}) : super(key: key);
+  const IntlPhoneTextFormField(
+      {Key key, @required this.inputLabel, @required this.phoneNumber, this.countriesRestriction, this.errorMessage, this.autoValidate, this.formKey})
+      : super(key: key);
 
   @override
   _IntlPhoneTextFormFieldState createState() => _IntlPhoneTextFormFieldState();
 }
 
 class _IntlPhoneTextFormFieldState extends State<IntlPhoneTextFormField> {
-  final String packageName = 'intl_phone_textformfield';
+
   List<DropdownMenuItem<Country>> flags = List();
   TextEditingController phoneController = TextEditingController();
   String phoneControllerMessage;
@@ -32,14 +34,24 @@ class _IntlPhoneTextFormFieldState extends State<IntlPhoneTextFormField> {
 
   loadCountries() async {
     String list = await DefaultAssetBundle.of(context)
-        .loadString('packages/$packageName/assets/countries.json');
+        .loadString('packages/${PhoneDefaultConfig.packageName}/assets/countries.json');
     json.decode(list).forEach((element) {
-        countries.add(Country.fromJson(element));
+      Country country = Country.fromJson(element);
+      if (widget.countriesRestriction != null) {
+        if(widget.countriesRestriction.contains(country.alpha2Code)){
+          countries.add(country);
+        }
+      } else {
+        countries.add(country);
+      }
     });
     setState(() {
       countries.sort((a, b) => a.dialCode.compareTo(b.dialCode));
       selectedCountry = countries[0];
     });
+    if (widget.phoneNumber?.initialValue != null) {
+      validateInitialValue();
+    }
   }
 
   Future validatePhoneNumber({String phoneNumber}) async {
@@ -58,8 +70,17 @@ class _IntlPhoneTextFormFieldState extends State<IntlPhoneTextFormField> {
   @override
   void initState() {
     loadCountries();
-    errorMessage = widget.errorMessage ?? PhoneDefaultConfig.defaultErrorMessage;
+    errorMessage =
+        widget.errorMessage ?? PhoneDefaultConfig.defaultErrorMessage;
     super.initState();
+  }
+
+  validateInitialValue() async{
+    bool isValid = await widget.phoneNumber.isValid(isInitialValueToTest: true);
+    if(isValid){
+      selectedCountry = countries.firstWhere((element) => element.dialCode == widget.phoneNumber.dialCode) ?? Country();
+      phoneController.text = widget.phoneNumber.localPhoneNumber;
+    }
   }
 
   @override
@@ -87,7 +108,7 @@ class _IntlPhoneTextFormFieldState extends State<IntlPhoneTextFormField> {
                       Image.asset(
                         'assets/flags/${value.alpha2Code.toLowerCase()}.png',
                         width: 32.0,
-                        package: packageName,
+                        package: PhoneDefaultConfig.packageName,
                       ),
                       SizedBox(width: 4),
                       Text(value.dialCode)
