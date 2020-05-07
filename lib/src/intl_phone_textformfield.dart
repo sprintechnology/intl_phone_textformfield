@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl_phone_textformfield/src/model/config.dart';
 import 'package:intl_phone_textformfield/src/model/intl_phone_number.dart';
+
 import 'model/country.dart';
 
 class IntlPhoneTextFormField extends StatefulWidget {
@@ -49,8 +50,10 @@ class _IntlPhoneTextFormFieldState extends State<IntlPhoneTextFormField> {
       }
     });
     setState(() {
-      countries.sort((a, b) => a.dialCode.compareTo(b.dialCode));
-      selectedCountry = countries[0];
+      if (mounted) {
+        countries.sort((a, b) => a.dialCode.compareTo(b.dialCode));
+        selectedCountry = countries[0];
+      }
     });
     if (widget.phoneNumber?.initialValue != null) {
       validateInitialValue();
