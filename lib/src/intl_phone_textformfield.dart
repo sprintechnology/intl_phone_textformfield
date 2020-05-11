@@ -139,7 +139,7 @@ class _IntlPhoneTextFormFieldState extends State<IntlPhoneTextFormField> {
               labelText: widget.inputLabel ?? PhoneDefaultConfig.defaultLabelMessage,
             ),
             validator: (String value) {
-              if (value.isEmpty || value.length < 5) {
+              if ((value.isEmpty || value.length < 5) || (value != null && widget.phoneNumber?.initialValue == value)) {
                 phoneControllerMessage = null;
               } else {
                 validatePhoneNumber(phoneNumber: value);
